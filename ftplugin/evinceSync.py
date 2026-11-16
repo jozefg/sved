@@ -144,7 +144,7 @@ class EvinceSyncView():
         logging.debug("connect_daemon: connecting to Evince daemon")
         self.daemon = self.bus.get_object(
             "org.gnome.Evince.Daemon",
-            "/org.gnome.Evince/Daemon")
+            "/org/gnome/Evince/Daemon")
 
     def handle_find_document_reply(self, evince_name):
         """Handle find document reply by calling
@@ -153,7 +153,7 @@ class EvinceSyncView():
                       evince_name)
         if (evince_name != "") and (evince_name is not None):
             self.evince_name = evince_name
-            ev_obj = self.bus.get_object(evince_name, "/org.gnome.Evince/Evince")
+            ev_obj = self.bus.get_object(evince_name, "/org/gnome/Evince/Evince")
             ev_obj.GetWindowList(
                 reply_handler=self.handle_get_window_list_reply,
                 error_handler=self.handle_get_window_list_error,
