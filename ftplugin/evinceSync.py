@@ -29,7 +29,7 @@ class EvinceSyncSourceCommon():
         self.bus.add_signal_receiver(
             self.on_sync_source,
             signal_name="SyncSource",
-            dbus_interface="org.gnome.evince.Window")
+            dbus_interface="org.gnome.Evince.Window")
 
     def on_sync_source(self, input_file, source_link, _):
         """Handle SyncSource signal (input_file, source_link, timestamp)
@@ -113,7 +113,7 @@ class EvinceSyncView():
         self.bus.add_signal_receiver(
             self.on_document_load,
             signal_name="DocumentLoaded",
-            dbus_interface="org.gnome.evince.Window",
+            dbus_interface="org.gnome.Evince.Window",
             sender_keyword="sender")
         self.evince_name = None
 
@@ -135,7 +135,7 @@ class EvinceSyncView():
         self.daemon.FindDocument(
             self.pdf_uri,
             True,
-            dbus_interface="org.gnome.evince.Daemon",
+            dbus_interface="org.gnome.Evince.Daemon",
             reply_handler=self.handle_find_document_reply,
             error_handler=self.handle_find_document_error)
 
@@ -143,8 +143,8 @@ class EvinceSyncView():
         """Establish connection to Evince dbus Daemon"""
         logging.debug("connect_daemon: connecting to Evince daemon")
         self.daemon = self.bus.get_object(
-            "org.gnome.evince.Daemon",
-            "/org/gnome/evince/Daemon")
+            "org.gnome.Evince.Daemon",
+            "/org.gnome.Evince/Daemon")
 
     def handle_find_document_reply(self, evince_name):
         """Handle find document reply by calling
@@ -153,11 +153,11 @@ class EvinceSyncView():
                       evince_name)
         if (evince_name != "") and (evince_name is not None):
             self.evince_name = evince_name
-            ev_obj = self.bus.get_object(evince_name, "/org/gnome/evince/Evince")
+            ev_obj = self.bus.get_object(evince_name, "/org.gnome.Evince/Evince")
             ev_obj.GetWindowList(
                 reply_handler=self.handle_get_window_list_reply,
                 error_handler=self.handle_get_window_list_error,
-                dbus_interface="org.gnome.evince.Application")
+                dbus_interface="org.gnome.Evince.Application")
 
     def on_document_load(self, uri, sender=None):
         """Handle DocumentLoaded signal from evince.Window"""
@@ -192,7 +192,7 @@ class EvinceSyncView():
                 self.source_file,
                 self.curpos,
                 0,
-                dbus_interface="org.gnome.evince.Window")
+                dbus_interface="org.gnome.Evince.Window")
             logging.debug("SyncView done")
             if self.done_callback:
                 self.done_callback()
